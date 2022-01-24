@@ -15,13 +15,14 @@ rl.question("Placed letters? (- for unknown) ", function (placedLetters) {
   rl.question("Known good? ", function (knownGood) {
     rl.question("Known bad? ", function (knownBad) {
       fs.readFile("words.txt", "utf8", (_err, file) => {
-        const words = file.split("\n");
+        const words = file.split("\n").map((w) => w.toUpperCase());
 
         console.log(
           words
             .filter(
               (word) =>
                 placedLetters
+                  .toUpperCase()
                   .split("")
                   .filter((l, i) => l === "-" || word[i] === l).length ===
                 word.length
@@ -29,14 +30,18 @@ rl.question("Placed letters? (- for unknown) ", function (placedLetters) {
             .filter(
               (word) =>
                 knownGood.length < 1 ||
-                knownGood.split("").filter((l) => word.includes(l)).length ===
-                  knownGood.length
+                knownGood
+                  .toUpperCase()
+                  .split("")
+                  .filter((l) => word.includes(l)).length === knownGood.length
             )
             .filter(
               (word) =>
                 knownBad.length < 1 ||
-                knownBad.split("").filter((l) => !word.includes(l)).length ===
-                  knownBad.length
+                knownBad
+                  .toUpperCase()
+                  .split("")
+                  .filter((l) => !word.includes(l)).length === knownBad.length
             )
         );
         console.log("Thanks for playing!");
